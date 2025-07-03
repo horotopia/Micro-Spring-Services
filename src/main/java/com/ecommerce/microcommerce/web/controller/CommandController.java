@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CommandController {
@@ -28,8 +29,9 @@ public class CommandController {
   }
 
   @GetMapping("/commands/{id}")
-  public Command findById(@PathVariable int id) {
-    return commandDao.findById(id);
+  public Command findById(@PathVariable String id) {
+    Optional<Command> command = commandDao.findById(id);
+    return command.orElse(null);
   }
 
   @PostMapping("/commands")
@@ -38,9 +40,10 @@ public class CommandController {
   }
 
   @PutMapping("/commands/{id}")
-  public Command updateCommand(@PathVariable int id, @RequestBody Command command) {
-    Command existingCommand = commandDao.findById(id);
-    if (existingCommand != null) {
+  public Command updateCommand(@PathVariable String id, @RequestBody Command command) {
+    Optional<Command> existingCommandOpt = commandDao.findById(id);
+    if (existingCommandOpt.isPresent()) {
+      Command existingCommand = existingCommandOpt.get();
       existingCommand.setCustomerName(command.getCustomerName());
       existingCommand.setProductName(command.getProductName());
       existingCommand.setQuantity(command.getQuantity());
@@ -50,10 +53,11 @@ public class CommandController {
   }
 
   @DeleteMapping(value = "/commands/{id}")
-  public Command deleteCommand(@PathVariable int id) {
-    Command command = commandDao.findById(id);
-    if (command != null) {
-      commandDao.delete(id);
+  public Command deleteCommand(@PathVariable String id) {
+    Optional<Command> commandOpt = commandDao.findById(id);
+    if (commandOpt.isPresent()) {
+      Command command = commandOpt.get();
+      commandDao.deleteById(id);
       return command;
     }
     return null;

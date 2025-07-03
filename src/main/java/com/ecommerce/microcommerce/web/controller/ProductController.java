@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProductController {
@@ -28,8 +29,9 @@ public class ProductController {
   }
 
   @GetMapping(value = "/products/{id}")
-  public Product getProduct(@PathVariable int id) {
-    return productDao.findById(id);
+  public Product getProduct(@PathVariable String id) {
+    Optional<Product> product = productDao.findById(id);
+    return product.orElse(null);
   }
 
   @PostMapping("/products")
@@ -38,21 +40,23 @@ public class ProductController {
   }
 
   @PutMapping(value = "/products/{id}")
-  public Product updateProduct(@PathVariable int id, @RequestBody Product product) {
-    Product existingProduct = productDao.findById(id);
-    if (existingProduct != null) {
+  public Product updateProduct(@PathVariable String id, @RequestBody Product product) {
+    Optional<Product> existingProductOpt = productDao.findById(id);
+    if (existingProductOpt.isPresent()) {
+      Product existingProduct = existingProductOpt.get();
       existingProduct.setName(product.getName());
       existingProduct.setPrice(product.getPrice());
-      return productDao.save(product);
+      return productDao.save(existingProduct);
     }
     return null;
   }
 
   @DeleteMapping(value = "/products/{id}")
-  public Product deleteProduct(@PathVariable int id) {
-    Product product = productDao.findById(id);
-    if (product != null) {
-      productDao.delete(id);
+  public Product deleteProduct(@PathVariable String id) {
+    Optional<Product> productOpt = productDao.findById(id);
+    if (productOpt.isPresent()) {
+      Product product = productOpt.get();
+      productDao.deleteById(id);
       return product;
     }
     return null;

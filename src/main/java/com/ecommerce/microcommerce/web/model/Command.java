@@ -1,23 +1,30 @@
 package com.ecommerce.microcommerce.web.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "commands")
 public class Command {
-  private int id;
+  @Id
+  private String id;
   private String customerName;
   private String productName;
   private int quantity;
 
-  public Command(int id, String customerName, String productName, int quantity) {
+  public Command() {}
+
+  public Command(String id, String customerName, String productName, int quantity) {
     this.id = id;
     this.customerName = customerName;
     this.productName = productName;
     this.quantity = quantity;
   }
 
-  public int getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(String id) {
     this.id = id;
   }
 
