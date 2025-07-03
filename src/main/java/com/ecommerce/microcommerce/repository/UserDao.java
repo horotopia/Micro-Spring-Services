@@ -1,4 +1,4 @@
-package com.ecommerce.microcommerce.dao;
+package com.ecommerce.microcommerce.repository;
 
 import com.ecommerce.microcommerce.model.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

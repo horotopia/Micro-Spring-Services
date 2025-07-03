@@ -1,4 +1,4 @@
-package com.ecommerce.microcommerce.web.controller;
+package com.ecommerce.microcommerce.controller;
 
 import com.ecommerce.microcommerce.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;

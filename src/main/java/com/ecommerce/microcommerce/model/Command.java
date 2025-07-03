@@ -1,4 +1,4 @@
-package com.ecommerce.microcommerce.web.model;
+package com.ecommerce.microcommerce.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

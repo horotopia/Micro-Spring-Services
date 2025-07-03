@@ -1,22 +1,22 @@
-package com.ecommerce.microcommerce.web.model;
+package com.ecommerce.microcommerce.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "clients")
-public class Client {
+@Document(collection = "products")
+public class Product {
   @Id
   private String id;
   private String name;
-  private String email;
+  private int price;
 
-  public Client() {
+  public Product() {
   }
 
-  public Client(String id, String name, String email) {
+  public Product(String id, String name, int price) {
     this.id = id;
     this.name = name;
-    this.email = email;
+    this.price = price;
   }
 
   public String getId() {
@@ -35,11 +35,11 @@ public class Client {
     this.name = name;
   }
 
-  public String getEmail() {
-    return email;
+  public int getPrice() {
+    return price;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setPrice(int price) {
+    this.price = price;
   }
 }

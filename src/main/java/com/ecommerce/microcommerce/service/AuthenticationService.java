@@ -1,6 +1,6 @@
 package com.ecommerce.microcommerce.service;
 
-import com.ecommerce.microcommerce.dao.UserDao;
+import com.ecommerce.microcommerce.repository.UserDao;
 import com.ecommerce.microcommerce.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

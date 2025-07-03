@@ -1,7 +1,7 @@
-package com.ecommerce.microcommerce.web.controller;
+package com.ecommerce.microcommerce.controller;
 
-import com.ecommerce.microcommerce.web.model.Client;
-import com.ecommerce.microcommerce.web.dao.ClientDao;
+import com.ecommerce.microcommerce.model.Client;
+import com.ecommerce.microcommerce.repository.ClientDao;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

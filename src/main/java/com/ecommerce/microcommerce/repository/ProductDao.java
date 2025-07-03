@@ -1,6 +1,6 @@
-package com.ecommerce.microcommerce.web.dao;
+package com.ecommerce.microcommerce.repository;
 
-import com.ecommerce.microcommerce.web.model.Product;
+import com.ecommerce.microcommerce.model.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
