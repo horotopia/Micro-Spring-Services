@@ -1,20 +1,17 @@
 package com.ecommerce.microcommerce.web.controller;
 
-import com.ecommerce.microcommerce.web.dao.CommandDao;
 import com.ecommerce.microcommerce.web.model.Command;
+import com.ecommerce.microcommerce.web.dao.CommandDao;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class CommandController {
 
   private final CommandDao commandDao;
@@ -23,23 +20,30 @@ public class CommandController {
     this.commandDao = commandDao;
   }
 
+  // Lecture accessible à tous les utilisateurs authentifiés
   @GetMapping("/commands")
-  public List<Command> allCommands() {
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  public List<Command> commandsList() {
     return commandDao.findAll();
   }
 
   @GetMapping("/commands/{id}")
-  public Command findById(@PathVariable String id) {
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  public Command commandDetails(@PathVariable String id) {
     Optional<Command> command = commandDao.findById(id);
     return command.orElse(null);
   }
 
+  // Création accessible aux utilisateurs authentifiés
   @PostMapping("/commands")
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   public Command addCommand(@RequestBody Command command) {
     return commandDao.save(command);
   }
 
-  @PutMapping("/commands/{id}")
+  // Modification réservée aux ADMIN
+  @PutMapping("/admin/commands/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public Command updateCommand(@PathVariable String id, @RequestBody Command command) {
     Optional<Command> existingCommandOpt = commandDao.findById(id);
     if (existingCommandOpt.isPresent()) {
@@ -52,7 +56,9 @@ public class CommandController {
     return null;
   }
 
-  @DeleteMapping(value = "/commands/{id}")
+  // Suppression réservée aux ADMIN
+  @DeleteMapping("/admin/commands/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public Command deleteCommand(@PathVariable String id) {
     Optional<Command> commandOpt = commandDao.findById(id);
     if (commandOpt.isPresent()) {

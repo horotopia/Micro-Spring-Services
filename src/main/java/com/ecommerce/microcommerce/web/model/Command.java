@@ -11,7 +11,8 @@ public class Command {
   private String productName;
   private int quantity;
 
-  public Command() {}
+  public Command() {
+  }
 
   public Command(String id, String customerName, String productName, int quantity) {
     this.id = id;

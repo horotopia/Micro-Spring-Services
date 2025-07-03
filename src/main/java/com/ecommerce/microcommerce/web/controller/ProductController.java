@@ -1,20 +1,17 @@
 package com.ecommerce.microcommerce.web.controller;
 
-import com.ecommerce.microcommerce.web.dao.ProductDao;
 import com.ecommerce.microcommerce.web.model.Product;
+import com.ecommerce.microcommerce.web.dao.ProductDao;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class ProductController {
 
   private final ProductDao productDao;
@@ -23,23 +20,30 @@ public class ProductController {
     this.productDao = productDao;
   }
 
+  // Lecture accessible à tous les utilisateurs authentifiés
   @GetMapping("/products")
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
   public List<Product> productsList() {
     return productDao.findAll();
   }
 
-  @GetMapping(value = "/products/{id}")
-  public Product getProduct(@PathVariable String id) {
+  @GetMapping("/products/{id}")
+  @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+  public Product productDetails(@PathVariable String id) {
     Optional<Product> product = productDao.findById(id);
     return product.orElse(null);
   }
 
-  @PostMapping("/products")
+  // Création réservée aux ADMIN
+  @PostMapping("/admin/products")
+  @PreAuthorize("hasRole('ADMIN')")
   public Product addProduct(@RequestBody Product product) {
     return productDao.save(product);
   }
 
-  @PutMapping(value = "/products/{id}")
+  // Modification réservée aux ADMIN
+  @PutMapping("/admin/products/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public Product updateProduct(@PathVariable String id, @RequestBody Product product) {
     Optional<Product> existingProductOpt = productDao.findById(id);
     if (existingProductOpt.isPresent()) {
@@ -51,7 +55,9 @@ public class ProductController {
     return null;
   }
 
-  @DeleteMapping(value = "/products/{id}")
+  // Suppression réservée aux ADMIN
+  @DeleteMapping("/admin/products/{id}")
+  @PreAuthorize("hasRole('ADMIN')")
   public Product deleteProduct(@PathVariable String id) {
     Optional<Product> productOpt = productDao.findById(id);
     if (productOpt.isPresent()) {
